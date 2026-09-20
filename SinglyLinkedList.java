@@ -102,31 +102,58 @@ public class SinglyLinkedList<E extends Comparable<E>> {
     // write your codes here
     public void swap(){
 
-        getSwaps();
+        TreeMap<Integer, Node<E>> newOrder = getNewOrder();
+
+
+        // int i = 0;
+        Node<E> prev = null;
+        for (Map.Entry<Integer, Node<E>> e : newOrder.entrySet()) {
+// System.out.println(e.getKey());
+// System.out.println(e.getValue().getElement());
+            if (prev != null) {
+                prev.setNext(e.getValue());
+            }
+            else head = e.getValue();
+
+            prev = e.getValue();
+        }
+        prev.setNext(null);
+        tail = prev;
+
+
 
         // for (int[] s : swaps) {
         //     swapTwoNodes(s);
         // }
     }
 
-    public void getSwaps() {
+    public TreeMap<Integer, Node<E>> getNewOrder() {
 
         // int numSwaps = size/2;
         // int[][] output = new int[numSwaps][2];
 
-        TreeMap<E, Integer> map = new TreeMap<>();
+        TreeMap<Node<E>, Integer> map = new TreeMap<>(Comparator.comparing(n -> n.getElement()));
         Node<E> walk = head;
         int i = 0;
         while (walk != null) {
-            map.put(walk.getElement(), i++);
+            map.put(walk, i++);
             walk = walk.getNext();
         }
 
-        for (i = 0; i < size/2 ; i++) {
-            Map.Entry<E, Integer> first = map.pollFirstEntry();
-            Map.Entry<E, Integer> last = map.pollLastEntry();
-            swapTwoNodes(first.getValue(), last.getValue());
+        TreeMap<Integer, Node<E>> newOrder = new TreeMap<>();
+        while (!map.isEmpty()) {
+            Map.Entry<Node<E>, Integer> first = map.pollFirstEntry();
+            try {
+                Map.Entry<Node<E>, Integer> last = map.pollLastEntry();
+                newOrder.put(first.getValue(), last.getKey());
+                newOrder.put(last.getValue(), first.getKey());
+            } catch (Exception e) {
+                newOrder.put(first.getValue(), first.getKey());
+            }
+            
+            
         }
+        return newOrder;
 
         // return output;
     }
@@ -137,63 +164,63 @@ public class SinglyLinkedList<E extends Comparable<E>> {
     // }
 
     // assume i1 < i2
-    public boolean swapTwoNodes(int i1, int i2) {
+    // public boolean swapTwoNodes(int i1, int i2) {
 
-        if (i1 > i2) {
-            int tmp = i1;
-            i1 = i2;
-            i2 = tmp;
-        }
+    //     if (i1 > i2) {
+    //         int tmp = i1;
+    //         i1 = i2;
+    //         i2 = tmp;
+    //     }
 
-        int i = 0;
+    //     int i = 0;
 
-        Node<E> walk = head;
-        Node<E> prevNode = null;
+    //     Node<E> walk = head;
+    //     Node<E> prevNode = null;
 
-        Node<E> firstNode = null;
-        Node<E> prevOfFirstNode = null;
+    //     Node<E> firstNode = null;
+    //     Node<E> prevOfFirstNode = null;
 
 
-        while (walk != null) {
+    //     while (walk != null) {
 
-            if (i == i1) {
-                // save this spot
-                firstNode = walk;
-                prevOfFirstNode = prevNode;
-            }
+    //         if (i == i1) {
+    //             // save this spot
+    //             firstNode = walk;
+    //             prevOfFirstNode = prevNode;
+    //         }
 
-            if (i == i2) {
-                // swap nodes
-                Node<E> nextNode = walk.getNext();
+    //         if (i == i2) {
+    //             // swap nodes
+    //             Node<E> nextNode = walk.getNext();
 
-                if (prevOfFirstNode == null) {
-                    head = walk;
-                } else {
-                    prevOfFirstNode.setNext(walk);
-                }
-                if (walk == firstNode.getNext()) {
-                    walk.setNext(firstNode);
-                }
-                else walk.setNext(firstNode.getNext());
+    //             if (prevOfFirstNode == null) {
+    //                 head = walk;
+    //             } else {
+    //                 prevOfFirstNode.setNext(walk);
+    //             }
+    //             if (walk == firstNode.getNext()) {
+    //                 walk.setNext(firstNode);
+    //             }
+    //             else walk.setNext(firstNode.getNext());
 
-                prevNode.setNext(firstNode);
-                firstNode.setNext(nextNode);
+    //             prevNode.setNext(firstNode);
+    //             firstNode.setNext(nextNode);
 
-                if (i2 == size-1) {
-                    // update tail
-                    tail = firstNode;
-                }
+    //             if (i2 == size-1) {
+    //                 // update tail
+    //                 tail = firstNode;
+    //             }
                 
-                return true;
-            }
+    //             return true;
+    //         }
 
-            prevNode = walk;
-            walk = walk.getNext();
-            i++;
-        }
+    //         prevNode = walk;
+    //         walk = walk.getNext();
+    //         i++;
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
    
 }
 
