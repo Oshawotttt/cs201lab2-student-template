@@ -102,20 +102,17 @@ public class SinglyLinkedList<E extends Comparable<E>> {
     // write your codes here
     public void swap(){
 
-        int[][] swaps = getSwaps();
+        getSwaps();
 
-        for (int[] s : swaps) {
-            swapTwoNodes(s);
-// System.out.println(this.toString());
-        }
-        
-        // swapTwoNodes(0, 2);
+        // for (int[] s : swaps) {
+        //     swapTwoNodes(s);
+        // }
     }
 
-    public int[][] getSwaps() {
+    public void getSwaps() {
 
-        int numSwaps = size/2;
-        int[][] output = new int[numSwaps][2];
+        // int numSwaps = size/2;
+        // int[][] output = new int[numSwaps][2];
 
         TreeMap<E, Integer> map = new TreeMap<>();
         Node<E> walk = head;
@@ -124,34 +121,29 @@ public class SinglyLinkedList<E extends Comparable<E>> {
             map.put(walk.getElement(), i++);
             walk = walk.getNext();
         }
-        // List<E> copy = new ArrayList<>(listOfLinkedList);
-        // copy.sort(Comparator.naturalOrder());
-
-        // int start = 0;
-        // int end = size-1;
-        // int i = 0;
-        // while (start < end) {
-        //     output[i++] = new int[] {listOfLinkedList.indexOf(copy.get(start++)), listOfLinkedList.indexOf(copy.get(end--))};
-            
-        // }
 
         for (i = 0; i < size/2 ; i++) {
             Map.Entry<E, Integer> first = map.pollFirstEntry();
             Map.Entry<E, Integer> last = map.pollLastEntry();
-            output[i] = new int[] {first.getValue(), last.getValue()};
+            swapTwoNodes(first.getValue(), last.getValue());
         }
 
-        return output;
+        // return output;
     }
 
-    public boolean swapTwoNodes(int[] swap) {
-        if (swap[0] < swap[1]) return swapTwoNodes(swap[0], swap[1]);
-        else return swapTwoNodes(swap[1], swap[0]);
-    }
+    // public boolean swapTwoNodes(int[] swap) {
+    //     if (swap[0] < swap[1]) return swapTwoNodes(swap[0], swap[1]);
+    //     else return swapTwoNodes(swap[1], swap[0]);
+    // }
 
     // assume i1 < i2
     public boolean swapTwoNodes(int i1, int i2) {
-// System.out.println(i1 + " " + i2);
+
+        if (i1 > i2) {
+            int tmp = i1;
+            i1 = i2;
+            i2 = tmp;
+        }
 
         int i = 0;
 
