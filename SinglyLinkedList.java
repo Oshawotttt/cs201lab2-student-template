@@ -117,21 +117,28 @@ public class SinglyLinkedList<E extends Comparable<E>> {
         int numSwaps = size/2;
         int[][] output = new int[numSwaps][2];
 
-        List<E> listOfLinkedList = new ArrayList<E>();
+        TreeMap<E, Integer> map = new TreeMap<>();
         Node<E> walk = head;
+        int i = 0;
         while (walk != null) {
-            listOfLinkedList.add(walk.getElement());
+            map.put(walk.getElement(), i++);
             walk = walk.getNext();
         }
-        List<E> copy = new ArrayList<>(listOfLinkedList);
-        copy.sort(Comparator.naturalOrder());
+        // List<E> copy = new ArrayList<>(listOfLinkedList);
+        // copy.sort(Comparator.naturalOrder());
 
-        int start = 0;
-        int end = size-1;
-        int i = 0;
-        while (start < end) {
-            output[i++] = new int[] {listOfLinkedList.indexOf(copy.get(start++)), listOfLinkedList.indexOf(copy.get(end--))};
+        // int start = 0;
+        // int end = size-1;
+        // int i = 0;
+        // while (start < end) {
+        //     output[i++] = new int[] {listOfLinkedList.indexOf(copy.get(start++)), listOfLinkedList.indexOf(copy.get(end--))};
             
+        // }
+
+        for (i = 0; i < size/2 ; i++) {
+            Map.Entry<E, Integer> first = map.pollFirstEntry();
+            Map.Entry<E, Integer> last = map.pollLastEntry();
+            output[i] = new int[] {first.getValue(), last.getValue()};
         }
 
         return output;
