@@ -101,8 +101,99 @@ public class SinglyLinkedList<E extends Comparable<E>> {
 
     // write your codes here
     public void swap(){
-        
 
+        int[][] swaps = getSwaps();
+
+        for (int[] s : swaps) {
+            swapTwoNodes(s);
+// System.out.println(this.toString());
+        }
+        
+        // swapTwoNodes(0, 2);
+    }
+
+    public int[][] getSwaps() {
+
+        int numSwaps = size/2;
+        int[][] output = new int[numSwaps][2];
+
+        List<E> listOfLinkedList = new ArrayList<E>();
+        Node<E> walk = head;
+        while (walk != null) {
+            listOfLinkedList.add(walk.getElement());
+            walk = walk.getNext();
+        }
+        List<E> copy = new ArrayList<>(listOfLinkedList);
+        copy.sort(Comparator.naturalOrder());
+
+        int start = 0;
+        int end = size-1;
+        int i = 0;
+        while (start < end) {
+            output[i++] = new int[] {listOfLinkedList.indexOf(copy.get(start++)), listOfLinkedList.indexOf(copy.get(end--))};
+            
+        }
+
+        return output;
+    }
+
+    public boolean swapTwoNodes(int[] swap) {
+        if (swap[0] < swap[1]) return swapTwoNodes(swap[0], swap[1]);
+        else return swapTwoNodes(swap[1], swap[0]);
+    }
+
+    // assume i1 < i2
+    public boolean swapTwoNodes(int i1, int i2) {
+// System.out.println(i1 + " " + i2);
+
+        int i = 0;
+
+        Node<E> walk = head;
+        Node<E> prevNode = null;
+
+        Node<E> firstNode = null;
+        Node<E> prevOfFirstNode = null;
+
+
+        while (walk != null) {
+
+            if (i == i1) {
+                // save this spot
+                firstNode = walk;
+                prevOfFirstNode = prevNode;
+            }
+
+            if (i == i2) {
+                // swap nodes
+                Node<E> nextNode = walk.getNext();
+
+                if (prevOfFirstNode == null) {
+                    head = walk;
+                } else {
+                    prevOfFirstNode.setNext(walk);
+                }
+                if (walk == firstNode.getNext()) {
+                    walk.setNext(firstNode);
+                }
+                else walk.setNext(firstNode.getNext());
+
+                prevNode.setNext(firstNode);
+                firstNode.setNext(nextNode);
+
+                if (i2 == size-1) {
+                    // update tail
+                    tail = firstNode;
+                }
+                
+                return true;
+            }
+
+            prevNode = walk;
+            walk = walk.getNext();
+            i++;
+        }
+
+        return false;
     }
    
 }
